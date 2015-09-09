@@ -1,0 +1,28 @@
+--[[
+%% properties
+
+%% globals
+--]]
+
+-----------------------------------------------
+-- Created by: Nut P.
+-- Created on: 28-08-2015
+-- Version 1.00
+-----------------------------------------------
+-- Deployed by: 
+-- Deployed on:
+-----------------------------------------------
+
+-- Mobile ID Updater
+function BroadcastPushMessage(message)
+  for i=1,1000 do
+  device = fibaro:get(i, "Push");
+  --fibaro:debug(device);
+  if(device == "1") then 
+      fibaro:debug(i);
+      fibaro:call(tonumber(i), "sendPush", message);
+  end
+  end
+end
+
+BroadcastPushMessage("Input Message Here");
