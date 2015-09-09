@@ -1,0 +1,57 @@
+--[[
+%% properties
+xx value
+xx2 value
+%% globals
+--]]
+
+-- ^^ เปลี่ยน xx เป็น Smoke ID
+-- ^^ เปลี่ยน xx2 เป็น Smoke Temp ID (มักเป็น smoke id + 1)
+-----------------------------------------------
+-- Created by: Nut P.
+-- Created on: 07-08-2015
+-- Version 1.00
+-----------------------------------------------
+-- Deployed by: 
+-- Deployed on:
+-----------------------------------------------
+smoke = 100; -- Smoke ID ที่ใช้
+smokeTemp = 101; -- Smoke Temp ID ที่ใช้ (มักเป็น smoke id + 1)
+sensitivity = 40; -- ระดับความอ่อนไหวของอุณหภูมในการเตือน (30-50) ยิ่งน้อยยิ่งเตือนเร็ว
+
+--============================================================================
+
+-- Mobile ID Updater
+function BroadcastPushMessage(message)
+  for i=1,1000 do
+  device = fibaro:get(i, "Push");
+  --fibaro:debug(device);
+  if(device == "1") then 
+      fibaro:debug(i);
+      fibaro:call(tonumber(i), "sendPush", message);
+  end
+  end
+end
+
+Temp = tonumber(fibaro:getValue(smokeTemp, "value"));
+
+if tonumber(fibaro:getValue(smoke, "value")) > 0 then
+  BroadcastPushMessage("Fire Alert !!!");
+else
+	if Temp >= 50 then
+  		BroadcastPushMessage("Potential Fire Detect. Temperature : "..Temp.."C");
+    	fibaro:abort();
+	elseif Temp >= 45 and sensitivity < 50 then
+    	BroadcastPushMessage("Potential Fire Detect. Temperature : "..Temp.."C");
+    	fibaro:abort();
+    elseif Temp >= 40 and sensitivity < 45 then
+    	BroadcastPushMessage("Potential Fire Detect. Temperature : "..Temp.."C");
+    	fibaro:abort();
+    elseif Temp >= 35 and sensitivity < 40 then
+    	BroadcastPushMessage("Potential Fire Detect. Temperature : "..Temp.."C");
+    	fibaro:abort();
+    elseif Temp >= 30 and sensitivity < 35 then
+    	BroadcastPushMessage("Potential Fire Detect. Temperature : "..Temp.."C");
+    	fibaro:abort();
+  	end
+end
