@@ -1,0 +1,71 @@
+--[[	
+%% properties	
+xx value	
+xx value	
+%% globals	
+--]]
+
+-- ^^ เปลี่ยน XX เป็น Motion ID ที่ต้องการ
+
+-----------------------------------------------
+-- Created by: Nut P.
+-- Created on: 07-08-2015
+-- Version 1.20 Fix manual switch off bug 09/09/15
+-- Version 1.10 Add array to Relay ID 24/08/15
+-----------------------------------------------
+-- Deployed by: 
+-- Deployed on:
+-----------------------------------------------
+
+motion1 = 50; -- motion1 ID ตัวที่ 1
+motion2 = 75; -- motion2 ID ตัวที่ 2
+relay = {100}; -- relay ID ที่ต้องการควบคมใส่ได้หลายตัว {100,101}
+addtime = 60; -- time to add เวลาที่ต้องการเปิดต่อ 1 ช่วง หน่วยเป็นวินาที
+-- กำหนดช่วงเวลาในการทำงาน เช่น stime 10 etime 15 ก็จะทำงาน 10.00-15.59
+stime = 0; -- start specific time ex. 14 = 14.00--	
+etime = 23; -- end specific time ex. 15 = --15.59	
+on = true; -- หากเวลาตรงให้ true = เปิด false = ปิด	( ไว้กลับค่าให้ช่วงเวลานั้นไม่ทำงานแทน )
+lux = 101; -- lux ID ที่ต้องการควบคุม
+setlux = 9999; -- set lux กำหนดค่าแสงหากน้อยกว่าให้ทำงาน 9999 คือเปิดทุกค่าแสง
+
+--============================================================================
+	
+local currentDate = os.date("*t"); -- get date & time	
+	
+if on == (currentDate.hour >= stime and currentDate.hour <= etime) and	
+  tonumber(fibaro:getValue(lux, "value")) < setlux then -- check time&lux	
+  	
+  local ss = fibaro:getSourceTrigger();	
+  if tonumber(fibaro:getValue(tonumber(ss['deviceID']), "value")) > 0 then	
+    
+    if fibaro:countScenes() > 1 then fibaro:abort() end --exit after another breach	
+    	
+        for i=1 ,#relay do
+  			fibaro:call(relay[i], "turnOn");
+		end
+        fibaro:debug("On : "..os.time());	
+    
+    time = tonumber(fibaro:getValue(tonumber(ss['deviceID']), "lastBreached"));
+    fibaro:debug(time);
+    
+    while os.time() < time + addtime do	
+      fibaro:sleep(1000);
+      time = math.max(tonumber(fibaro:getValue(motion1, "lastBreached")),tonumber(fibaro:getValue(motion2, "lastBreached")))
+      if (time + addtime) - os.time() < 5 and
+         ( tonumber(fibaro:getValue(motion1, "value")) > 0 or 
+         tonumber(fibaro:getValue(motion2, "value")) > 0 ) then
+        	addtime = addtime+addtime;
+      end
+	for i=1 ,#relay do
+  		if tonumber(fibaro:getValue(relay[i], "value")) < 1 then
+        			fibaro:debug("abort from manual off");
+      			fibaro:abort();
+      		end
+	end
+    end	
+    for i=1 ,#relay do
+  			fibaro:call(relay[i], "turnOff");
+		end
+    fibaro:debug("Off : "..os.time());	
+  end	
+end	
