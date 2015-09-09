@@ -1,0 +1,46 @@
+--[[
+%% autostart
+%% properties
+%% globals
+--]]
+
+-----------------------------------------------
+-- Created by: Nut P.
+-- Created on: 24-08-2015
+-- Version 1.00
+-----------------------------------------------
+-- Deployed by: 
+-- Deployed on:
+-----------------------------------------------
+
+startTime = "17:03"; -- เวลาเปิด
+sensor = {162,206,213,142,8,11,18,14}; -- ตัวที่ต้องการควบคุม ex. "relay = {5,10,100};
+check = 50; -- check level หากน้อยกว่าให้ส่งเตือน
+
+local sourceTrigger = fibaro:getSourceTrigger();
+local startSource = fibaro:getSourceTrigger();
+
+function tempFunc()
+    local currentDate = os.date("*t");
+    --if (
+    -- ( ((currentDate.wday == 1 or currentDate.wday == 2 or currentDate.wday == 3 or currentDate.wday == 4 or currentDate.wday == 5 or currentDate.wday == 6 or currentDate.wday == 7) and string.format("%02d", currentDate.hour) .. ":" .. string.format("%02d", currentDate.min) == "12:45") )
+    --)
+  	if string.format("%02d", currentDate.hour) .. ":" .. string.format("%02d", currentDate.min) == startTime then
+    	for i=1 ,#sensor do
+      		fibaro:debug("hi");
+  			if tonumber(fibaro:getValue(sensor[i], "batteryLevel")) < check then
+        		-- Send an email to the email address associated with user 2.
+                local subject = "Battery Level Alert"
+                local message = fibaro:getName(sensor[i]).." : battey level below 50%"
+                fibaro:call(2, "sendEmail", subject, message)
+        	end
+		end
+  	end
+    
+    setTimeout(tempFunc, 60*1000)
+end
+
+if (sourceTrigger["type"] == "autostart") then
+	tempFunc()
+end
+
