@@ -5,6 +5,8 @@ xx dead
 %% globals
 --]]
 
+--^^ Add every relay devices with "xx(ID) dead"
+
 local subject = "Potential electrical down"
 local message = "Some of your device is dead node. May be an electrical down period"
 fibaro:call(2, "sendEmail", subject, message)
