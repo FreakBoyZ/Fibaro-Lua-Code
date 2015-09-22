@@ -1,0 +1,10 @@
+--[[
+%% properties
+xx dead
+xx dead
+%% globals
+--]]
+
+local subject = "Potential electrical down"
+local message = "Some of your device is dead node. May be an electrical down period"
+fibaro:call(2, "sendEmail", subject, message)
