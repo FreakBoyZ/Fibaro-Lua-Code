@@ -1,0 +1,18 @@
+--[[
+%% properties
+
+%% globals
+--]]
+
+fibaro:debug(os.time()%4);
+tick = 0;
+check = os.time()%4;
+
+while tick <= check do
+  fibaro:call(413, "turnOn");
+  fibaro:call(413, "turnOff");
+  fibaro:sleep(1000);
+  tick = tick+1;
+end
+
+fibaro:call(413, "turnOn");
