@@ -1,0 +1,41 @@
+--[[
+%% autostart
+%% properties
+%% globals
+--]]
+
+local sourceTrigger = fibaro:getSourceTrigger();
+function tempFunc()
+local currentDate = os.date("*t");
+local startSource = fibaro:getSourceTrigger();
+if (
+ ( ((currentDate.wday == 2 or currentDate.wday == 3 or currentDate.wday == 4 or currentDate.wday == 5 or currentDate.wday == 6) and string.format("%02d", currentDate.hour) .. ":" .. string.format("%02d", currentDate.min) == "06:00") )
+)
+then
+    i=0;
+    while i <= (900) do
+      	value = i/9;
+		fibaro:call(78, "setValue", value);
+      	fibaro:debug(value);
+      	fibaro:sleep(9*1000);
+      	i = i+9;
+    end
+end
+
+setTimeout(tempFunc, 60*1000)
+end
+if (sourceTrigger["type"] == "autostart") then
+tempFunc()
+else
+
+local currentDate = os.date("*t");
+local startSource = fibaro:getSourceTrigger();
+if (
+startSource["type"] == "other"
+)
+then
+	fibaro:call(78, "setValue", "0");
+end
+
+end
+
