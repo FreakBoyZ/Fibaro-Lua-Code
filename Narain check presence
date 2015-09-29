@@ -1,0 +1,44 @@
+--[[	
+%% properties	
+108 value	
+%% globals	
+--]]	
+
+-- ^^ เปลี่ยน XX เป็น Motion ID ที่ต้องการ	
+
+motion = 108; -- motion1 ID ตัวที่ใช้
+relay = {11}; -- relay ID ที่ต้องการควบคมใส่ได้หลายตัว {100,101}
+addtime = 60; -- time to add เวลาที่ต้องการเปิดต่อ 1 ช่วง หน่วยเป็นวินาที
+-- กำหนดช่วงเวลาในการทำงาน เช่น stime 10 etime 15 ก็จะทำงาน 10.00-15.59
+stime = 18; -- start specific time ex. 14 = 14.00--	
+etime = 23; -- end specific time ex. 15 = --15.59	
+on = true; -- หากเวลาตรงให้ true = เปิด false = ปิด	( ไว้กลับค่าให้ช่วงเวลานั้นไม่ทำงานแทน )
+	
+--============================================================================
+
+local currentDate = os.date("*t"); -- get date & time	
+	
+if on == (currentDate.hour >= stime and currentDate.hour <= etime) then 
+    local ss = fibaro:getSourceTrigger();	
+    if tonumber(fibaro:getValue(tonumber(ss['deviceID']), "value")) > 0 then
+    	if fibaro:countScenes() > 1 then fibaro:abort() end --exit after another breach	 
+     	i=0;
+    	while i<60 do
+      		if tonumber(fibaro:getValue(motion, "value")) > 0 then 
+        		i = i+1;
+        		fibaro:debug(i);
+      		end
+      		if tonumber(fibaro:getValue(motion, "value")) == 0 then 
+        		fibaro:debug("abort");
+        		fibaro:abort();
+      		end
+      		fibaro:sleep(1000);
+    	end
+    for i=1 ,#relay do
+    	fibaro:call(relay[i], "turnOn");
+    end  
+    	fibaro:debug("On");
+    end
+end
+
+
