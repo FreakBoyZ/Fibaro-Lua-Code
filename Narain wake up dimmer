@@ -14,11 +14,12 @@ if (
 then
     i=0;
     while i <= (900) do
-      	value = i/9;
+      	value = 15+(i/90);
+      	if tonumber(fibaro:getValue(78, "value")) == 0 then fibaro:abort() end
 		fibaro:call(78, "setValue", value);
       	fibaro:debug(value);
-      	fibaro:sleep(9*1000);
-      	i = i+9;
+      	fibaro:sleep(90*1000);
+      	i = i+90;
     end
 end
 
@@ -38,4 +39,5 @@ then
 end
 
 end
+
 
