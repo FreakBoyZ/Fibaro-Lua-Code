@@ -17,7 +17,7 @@ startTime = "10:01"; -- เวลาเปิด
 endTime = "10:02"; -- เวลาปิด
 relay = {413}; -- ตัวที่ต้องการควบคุม ex. "relay = {5,10,100};
 
-
+--=========================================================
 local sourceTrigger = fibaro:getSourceTrigger();
 local startSource = fibaro:getSourceTrigger();
 
