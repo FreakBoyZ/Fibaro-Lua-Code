@@ -1,0 +1,41 @@
+--[[
+%% properties
+
+%% globals
+--]]
+
+-----------------------------------------------
+-- Created by: Nut P.
+-- Created on: 05-10-2015
+-- Version 1.00
+-----------------------------------------------
+-- Deployed by: 
+-- Deployed on:
+-----------------------------------------------
+
+MaxNode = 500; -- เท่ากับจำนวน ID อุปกรณ์ล่าสุดหรือมากกว่า
+ACID = {497}; -- AC operating mode ID ใส่ได้หลายตัว
+
+--====================================================================
+for i=1,MaxNode do
+  device = fibaro:get(i, "deviceControlType");
+  --fibaro:debug(device);
+  if(device ~= nil ) and 
+    (device == "2" or -- Lighting
+     device == "23" or -- Dimmer
+     device == "50" or -- RGB
+     device == "51" or -- RGBW
+     device == "20" )then -- other type
+  	--fibaro:debug(i);
+  	--fibaro:debug(fibaro:get(i, "deviceControlType"));
+  	--fibaro:debug(fibaro:getName(i));
+    fibaro:call(i, "turnOff");
+    --fibaro:call(i, "setMode", "0");
+    fibaro:debug("ID : "..i.." Name : "..fibaro:getName(i).." Type : "..fibaro:get(i, "deviceControlType"));
+  end
+end
+
+for i=1 ,#ACID do
+  	fibaro:call(ACID[i], "setMode", "0");
+  	fibaro:sleep(1000);
+end
