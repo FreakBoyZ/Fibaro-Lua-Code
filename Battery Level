@@ -31,7 +31,7 @@ function tempFunc()
   			if tonumber(fibaro:getValue(sensor[i], "batteryLevel")) < check then
         		-- Send an email to the email address associated with user 2.
                 local subject = "Battery Level Alert"
-                local message = fibaro:getName(sensor[i]).." : battey level below 50%"
+                local message = fibaro:getName(sensor[i]).." : battey level below "..check.." %"
                 fibaro:call(2, "sendEmail", subject, message)
         	end
 		end
