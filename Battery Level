@@ -26,6 +26,7 @@ function tempFunc()
     -- ( ((currentDate.wday == 1 or currentDate.wday == 2 or currentDate.wday == 3 or currentDate.wday == 4 or currentDate.wday == 5 or currentDate.wday == 6 or currentDate.wday == 7) and string.format("%02d", currentDate.hour) .. ":" .. string.format("%02d", currentDate.min) == "12:45") )
     --)
   	if string.format("%02d", currentDate.hour) .. ":" .. string.format("%02d", currentDate.min) == startTime then
+  	fibaro:call(1, 'wakeUpAllDevices');
     	for i=1 ,#sensor do
       		fibaro:debug("hi");
   			if tonumber(fibaro:getValue(sensor[i], "batteryLevel")) < check then
