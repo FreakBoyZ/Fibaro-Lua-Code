@@ -1,0 +1,136 @@
+-- Script to summarize "wake up" and "polling" interval.
+-- Version 1.1. 2015-06-27 Fix for:
+--    LUA error: /opt/fibaro/scenes/390.lua:70:
+--     attempt to perform arithmetic on local 'timeSec' (a nil value)
+-- Version 1.0. 2015-06-14. Initial version. Tested on HC2 V4.049.
+
+-- Creator: Peter Gebruers (Fibaro forum: petergebruers).
+-- Distributed under the Creative Commons CC BY-SA 4.0 license,
+-- see https://creativecommons.org/licenses/by-sa/4.0/
+
+-- Warning! This script can kill your pet! I guarantee you
+-- that it doesn't do that very often. But if something bad happens,
+-- I'm not to blame!
+
+function master(m)
+  local polling = false
+  for k = 1, #m.interfaces do
+    if m.interfaces[k] == 'polling' then
+      polling = true
+      break
+    end
+  end
+  local battery = false
+  for k = 1, #m.interfaces do
+    if m.interfaces[k] == 'battery' then
+      battery = true
+      break
+    end
+  end
+  if battery then
+    if m.properties.wakeUpTime == nil then
+      return string.format(
+        '%s    nil      nil Please check wake up interval in GUI.<br>',
+        makeLink(m.id))
+    end
+    if tonumber(m.properties.wakeUpTime) == 0 then
+      return string.format("%s      0   = none W<br>", makeLink(m.id))
+    else
+      return string.format('%s %6u %8s W<br>',
+        makeLink(m.id),
+        m.properties.wakeUpTime,
+        hms(m.properties.wakeUpTime))
+    end
+  end
+  if polling then
+    if m.properties.pollingInterval == nil then
+      return string.format(
+        '%s    nil      nil Please check polling interval in GUI.<br>',
+        makeLink(m.id))
+    end
+    pollingInterval=tonumber(m.properties.pollingInterval)/1000
+    if pollingInterval == 0 then
+      return string.format(
+        '%s      *        *  G<br>',
+        makeLink(m.id))
+    else
+      return string.format(
+        '%s %6u %8s   P<br>',
+        makeLink(m.id),
+        pollingInterval,
+        hms(pollingInterval))
+    end
+  else
+    return string.format(
+      '%s      -        -    X<br>',
+      makeLink(m.id))
+  end
+end
+
+function makeLink(id)
+  return string.format(
+    '<a href="../devices/configuration.html?id=%u" target="_blank"'..
+    'style="display:inline;color:Cyan">%4u</a>',
+    id, id)
+end
+
+function hms(timeSec)
+  return string.format('%.2d:%.2d:%.2d', timeSec/(60*60),
+    timeSec/60%60, timeSec%60)
+end
+
+function polling(jsonTbl)
+  local txt =
+  '<pre>Polling & Wakeup Interval. Click on device ID to edit<br>\z
+  W = Wakeup Interval (device is battery powered).<br>\z
+  G = Device uses global polling queue.<br>\z
+  P = Device will be polled at periodic intervals.<br>\z
+  X = Device excluded from polling.<br>'..
+  '  ID   T(s) T(h:m:s) Info<br>'
+  local globalPollingTimeSec=-1
+  local masters=0
+  for i, v in pairs(jsonTbl) do
+    --Master?
+    if v.parentId == 1 then
+      txt=txt..master(v)
+      masters=masters+1
+    end
+  end
+  txt=txt.."<br>Total number of devices: "..masters..".</pre>"
+  fibaro:debug(txt)
+end
+
+function decode(responseJSON)
+  --fibaro:debug(responseJSON)
+  local jsonTbl= json.decode(responseJSON)
+  if jsonTbl==nil then
+    if #responseJSON == 0 then
+      fibaro:debug("HC2 response is valid, but empty")
+      return
+    end
+    fibaro:debug("JSON decode failed for: "..responseJSON)
+    return
+  end
+  return jsonTbl
+end
+
+-- Error handling
+function httpError(err)
+  fibaro:Debug("HTTP call error: " .. err)
+end
+
+function call(api, processor)
+  local HC2 = net.HTTPClient()
+  HC2:request(
+    "http://127.0.0.1:11111"..api,
+    { success = function(resp) processor(resp.data) end,
+      error =  httpError,
+      options = {method = "GET" }
+    })
+end
+
+function getDevices(data)
+  polling(decode(data))
+end
+
+call('/api/devices/', getDevices)
