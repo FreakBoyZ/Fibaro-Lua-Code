@@ -1,0 +1,39 @@
+--[[
+%% properties
+
+%% globals
+--]]
+
+--local imgUrl = 'http://www.fibaro.com/images/pol/sys_uslugi.png';
+local imgUrl = 'http://www.futurelifestyle.co.th/img/home/iphone-6.png';
+
+-- pop-up call
+HomeCenter.PopupService.publish({
+    title = 'It\'s party time !!!',
+    subtitle = os.date("%I:%M:%S %p | %B %d, %Y"),
+    contentTitle = 'Let\'s party guy.',
+    contentBody = 'What scene should i run ?',
+    img = imgUrl,
+    type = 'Info',
+    --type = 'Success',
+    --type = 'Warning',
+    --type = 'Critical',
+    buttons = {
+      { caption = 'Party', sceneId = 120 },
+      { caption = 'Close', sceneId = 0 },
+      { caption = 'Cancel', sceneId = 0 }
+    }
+  })
+
+function BroadcastPushMessage(message)
+  for i=1,1000 do
+  device = fibaro:get(i, "Push");
+  --fibaro:debug(device);
+  if(device == "1") then 
+      fibaro:debug(i);
+      fibaro:call(tonumber(i), "sendPush", message);
+  end
+  end
+end
+
+BroadcastPushMessage("Check");
