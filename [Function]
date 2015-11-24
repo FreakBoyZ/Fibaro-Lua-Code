@@ -1,0 +1,4 @@
+fibaro:call(1, "wakeUpDeadDevice", 100);
+fibaro:call(1, "wakeUpDeadDevice", 28);
+fibaro:call(1, "wakeUpDeadDevice", 30);
+fibaro:call(1, 'wakeUpAllDevices');
