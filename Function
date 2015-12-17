@@ -1,8 +1,4 @@
-fibaro:call(1, "wakeUpDeadDevice", 100);
-fibaro:call(1, "wakeUpDeadDevice", 28);
-fibaro:call(1, "wakeUpDeadDevice", 30);
-fibaro:call(1, 'wakeUpAllDevices');
-
+// Custom Function //
 function debug(message) fibaro:debug(message) end
 function sleep(time) fibaro:sleep(time*1000) end
 function thisTime() return (os.date("*t").hour .. ":" .. os.date("*t").min) end
@@ -15,3 +11,39 @@ function pushMessage(m) for i=1,1000 do if(fibaro:get(i, "Push") == "1") then fi
 function sendMail(s,m) fibaro:call(2, "sendEmail", s, m) end
 function getTriggerID() return fibaro:getSourceTrigger()['deviceID'] end
 function getValue(id) return fibaro:getValue(id, "value")) end
+
+// WakeUp Function //
+fibaro:call(1, "wakeUpDeadDevice", 100);
+fibaro:call(1, "wakeUpDeadDevice", 28);
+fibaro:call(1, "wakeUpDeadDevice", 30);
+fibaro:call(1, 'wakeUpAllDevices');
+
+// RGB Gadget //
+local currentDate = os.date("*t");
+if currentDate.wday == 1 then fibaro:call(relay, "setColor", "255","0","0","100");
+elseif currentDate.wday == 2 then fibaro:call(relay, "setColor", "255","187","0","100");
+elseif currentDate.wday == 3 then fibaro:call(relay, "setColor", "140","0","68","100");
+elseif currentDate.wday == 4 then fibaro:call(relay, "setColor", "0","255","0","100");	
+elseif currentDate.wday == 5 then fibaro:call(relay, "setColor", "255","50","0","100");	
+elseif currentDate.wday == 6 then fibaro:call(relay, "setColor", "0","0","255","100");	
+else fibaro:call(relay, "setColor", "100","0","255","100");	
+end
+
+// Scene Action //
+xx = fibaro:countScenes();
+fibaro:startScene(xx);
+fibaro:killScenes(xx);
+fibaro:setSceneEnabled(xx, true);
+fibaro:setSceneEnabled(xx, false);
+
+// Timer Example //
+local currentDate = os.date("*t");
+-- ตัวอย่างการใช้
+xx = currentDate.hour
+yy = currentDate.min
+if currentDate.hour == xx then action1 end
+-- หากเวลา 12.45 ให้ทำ action 1
+timer = "12:45";
+if (string.format("%02d", currentDate.hour) .. ":" .. string.format("%02d", currentDate.min) == timer) then
+  action 1
+end
