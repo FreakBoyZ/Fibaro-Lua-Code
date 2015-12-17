@@ -1,0 +1,17 @@
+fibaro:call(1, "wakeUpDeadDevice", 100);
+fibaro:call(1, "wakeUpDeadDevice", 28);
+fibaro:call(1, "wakeUpDeadDevice", 30);
+fibaro:call(1, 'wakeUpAllDevices');
+
+function debug(message) fibaro:debug(message) end
+function sleep(time) fibaro:sleep(time*1000) end
+function thisTime() return (os.date("*t").hour .. ":" .. os.date("*t").min) end
+function multiOn(array) for i=1,#array do fibaro:call(array[i], "turnOn") end end
+function multiOff(array) for i=1,#array do fibaro:call(array[i], "turnOn") end end
+function wakeUp() fibaro:call(1, 'wakeUpAllDevices') end
+function abort() fibaro:abort() end
+function lastBreached(sensorID) return fibaro:getValue(sensorID, "lastBreached") end
+function pushMessage(m) for i=1,1000 do if(fibaro:get(i, "Push") == "1") then fibaro:call(i, "sendPush", m) end end end
+function sendMail(s,m) fibaro:call(2, "sendEmail", s, m) end
+function getTriggerID() return fibaro:getSourceTrigger()['deviceID'] end
+function getValue(id) return fibaro:getValue(id, "value")) end
