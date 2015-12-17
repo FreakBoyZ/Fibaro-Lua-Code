@@ -1,0 +1,32 @@
+--[[
+%% properties
+82 value
+%% globals
+--]]
+
+MotionID = 82
+Relay = 5
+CloseTime = 120 -- sec
+
+function d(message) fibaro:debug(message.." "..os.time()) end
+function s(time) fibaro:sleep(time*1000) end
+
+function turnOff(time)
+  for i=1,time do 
+    s(1)
+    if fibaro:getValue(Relay, "value") == "0" then d("manaul off"); fibaro:abort() end
+    if fibaro:getValue(MotionID, "value") == "1" then d("abort"); fibaro:abort() end
+  end
+  fibaro:call(Relay, "turnOff")
+  d("off")
+end
+
+if fibaro:getValue(MotionID, "value") == "1" then
+  fibaro:call(Relay, "turnOn")
+  d("on")
+end
+
+if fibaro:getValue(MotionID, "value") == "0" then
+  d("run")
+  turnOff(CloseTime)
+end
