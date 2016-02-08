@@ -1,0 +1,82 @@
+--[[ 
+%% properties
+148 sceneActivation
+%% globals 
+--]]
+
+---------------------Function------------------------
+-----------------------------------------------------
+relay = function(id,state)
+  fibaro:call(id,state);
+end
+
+local on = "turnOn";
+local off = "turnOff";
+-----------------------------------------------------
+getV = function(gid)
+  return tonumber(fibaro:getValue(gid, "value"));
+end
+-----------------------------------------------------
+setA = function(sid,sarm)
+  fibaro:call(sid, "setArmed", sarm);
+end
+-----------------------------------------------------
+-----------------------------------------------------
+
+local armID = {115,117,119,121,124,145};
+
+local ButtonPressed = fibaro:getValue(148, "sceneActivation")
+fibaro:debug(fibaro:getValue(148, "sceneActivation"))
+fibaro:debug(fibaro:getValue(148, "value"))
+
+if ( tonumber(ButtonPressed) == 1) then 
+fibaro:debug("MiniMote button 1 pressed") 
+fibaro:sleep(3);
+if getV(132) == 0 then
+	relay(132,on);
+else
+    relay(132,off);
+end
+--fibaro:startScene(7); 
+
+--elseif ( tonumber(ButtonPressed) == 2) then
+--fibaro:debug("MiniMote button 2 pressed")
+--fibaro:sleep(30); 
+--fibaro:call(86, "turnOff");
+--fibaro:startScene(2);
+
+--elseif ( tonumber(ButtonPressed) == 3) then
+--fibaro:debug("MiniMote button 3 pressed")
+--fibaro:sleep(30);
+--fibaro:startScene(2);
+  
+--elseif ( tonumber(ButtonPressed) == 4) then
+--fibaro:debug("MiniMote button 4 pressed")
+--fibaro:sleep(30);
+--fibaro:startScene(2);
+
+--[elseif ( tonumber(ButtonPressed) == 5) then 
+--fibaro:debug("MiniMote button 5 pressed") 
+--fibaro:startScene(8);
+
+--[elseif ( tonumber(ButtonPressed) == 6) then 
+--fibaro:debug("MiniMote button 6 pressed / Zolderlamp Aan") 
+--fibaro:call(27, "turnOn") --]]
+
+elseif ( tonumber(ButtonPressed) == 7) then 
+fibaro:debug("MiniMote button 7 pressed") 
+fibaro:sleep(3);
+for i=1 ,#armID do
+  setA(armID[i],1);
+end
+
+elseif ( tonumber(ButtonPressed) == 8) then 
+fibaro:debug("MiniMote button 8 pressed") 
+fibaro:sleep(3);
+for i=1 ,#armID do
+  setA(armID[i],0);
+end
+
+else 
+fibaro:debug("No response") 
+end
