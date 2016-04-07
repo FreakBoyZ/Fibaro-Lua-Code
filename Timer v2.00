@@ -1,0 +1,50 @@
+--[[
+%% autostart
+%% properties
+%% globals
+--]]
+-----------------------------------------------
+-- Created by: Nut P.
+-- Created on: 07-04-2016
+-- Version 2.00
+-----------------------------------------------
+-- Deployed by: 
+-- Deployed on:
+-----------------------------------------------
+-- ต้องการใช้วันใดให้ทำการใส่เลข 1 แทนที่ 0
+Sunday = 0
+Monday = 0
+Tuesday = 0
+Wednesday = 0
+Thursday = 0
+Friday = 0
+Saturday = 0
+startTime = "14:16"; -- เวลาเปิด
+endTime = "14:17"; -- เวลาปิด
+relay = {413}; -- ตัวที่ต้องการควบคุม ex. "relay = {5,10,100};
+
+
+local sourceTrigger = fibaro:getSourceTrigger();
+
+function tempFunc()
+  	Day = {Sunday, Monday, Tuesday ,Wednesday, Thursday, Friday, Saturday}
+    local currentDate = os.date("*t");
+  	Time = string.format("%02d", currentDate.hour) .. ":" .. string.format("%02d", currentDate.min)
+    checkDay = currentDate.wday
+
+  	if Time == startTime and Day[checkDay] == 1 then
+    	for i=1 ,#relay do
+  			fibaro:call(relay[i], "turnOn");
+		end
+    elseif Time == endTime and Day[checkDay] == 1 then
+    	for i=1 ,#relay do
+  			fibaro:call(relay[i], "turnOff");
+		end
+  	end
+    
+    setTimeout(tempFunc, 60*1000)
+end
+
+if (sourceTrigger["type"] == "autostart") then
+	tempFunc()
+end
