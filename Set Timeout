@@ -1,0 +1,16 @@
+--[[
+%% properties
+%% events
+%% globals
+--]]
+
+i=1
+function tempFunc()
+
+  print(i)
+  i = i+1
+
+setTimeout(tempFunc, 10*1000)
+end
+
+tempFunc()
