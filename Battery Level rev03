@@ -1,0 +1,147 @@
+--[[
+%% properties
+%% events
+%% globals
+--]]
+
+lowLevel = 65 -- ปริมาณแบตเตอรี่ที่ต้องการให้ MainFnc ทำงาน เมื่อต่ำกว่าค่าที่กำหนด
+
+-- name คือ ชื่ออุปกรณ์
+-- room คือ ชื่อห้อง
+-- id คือ id คืออุปกรณ์
+-- batterLevel คือ ปริมาณแบตล่าสุด
+
+-- ฟังก์ชั่นนี้ จะถูกเรียกทุกครั้ง ในทุกๆอุปกรณ์ที่ปริมาณแบต < lowLevel ที่กำหนด
+function MainFnc(name,room,id,batteryLevel)
+ 	-- Code
+end
+
+--------------------------------------------------
+function checkDevices(masters,slaves)
+  -- main loop: all MASTERS
+  local OKList, lowList, emptyList={},{},{}
+  for mstrKey,mstr in pairsByKeys(masters) do
+    if mstr.properties.batteryLevel then
+      local _,slv=next(slaves[mstr.id])
+      local name = slv.name
+      local room = (fibaro:getRoomName(slv.roomID) or
+        "Unassigned")
+      local batteryLevel=tonumber(mstr.properties.batteryLevel)
+      local txt=string.format("%s (%s), ID: %s, level = %d",
+        name,room,makeLink(slv.id),batteryLevel)
+      if batteryLevel==255 or batteryLevel==0 then
+        table.insert(emptyList,txt)
+      elseif batteryLevel<lowLevel then
+        table.insert(lowList,txt)
+		MainFnc(name,room,slv.id,batteryLevel)
+      else
+        table.insert(OKList,txt)
+      end
+    end
+  end
+  fibaro:debug("*** Battery empty:")
+  for _,v in ipairs(emptyList) do
+    fibaro:debug(v)
+  end
+  fibaro:debug("")
+  fibaro:debug("*** Battery below "..lowLevel..":")
+  for _,v in ipairs(lowList) do
+    fibaro:debug(v)
+  end
+  fibaro:debug("")
+  fibaro:debug("*** Battery OK:")
+  for _,v in ipairs(OKList) do
+    fibaro:debug(v)
+  end
+  
+end
+
+function makeLink(id)
+  return string.format(
+    '<a href="../devices/configuration.html?id=%u" target="_blank"'..
+    'style="display:inline;color:Cyan">%u</a>',
+    id, id)
+end
+
+-- Helper function to sort table on keys
+function pairsByKeys (t, f)
+  local a = {}
+  for n in pairs(t) do table.insert(a, n) end
+  table.sort(a, f)
+  local i = 0      -- iterator variable
+  local iter = function ()   -- iterator function
+    i = i + 1
+    if a[i] == nil then return nil
+    else return a[i], t[a[i]]
+    end
+  end
+  return iter
+end
+
+function getMasterSlave(jsonTbl)
+  local masters={}
+  local slaves={}
+  for i, v in pairs(jsonTbl) do
+    --Is it as Master?
+    if v.parentId then
+      if v.parentId == 1 then
+        masters[v.id]=v
+      elseif v.parentId >=4 then
+        --this is a slave
+      endPointId = tonumber(v.properties.endPointId)
+        if endPointId then
+          root=slaves[v.parentId]
+          if root then
+            root[endPointId]=v
+          else
+            slaves[v.parentId]={[endPointId]=v}
+          end
+        else
+          fibaro:debug("Device without endpoint: "..v.id.. " "..v.name)
+        end
+      end
+    end
+  end
+  return masters, slaves
+end
+
+function decode(responseJSON)
+  if not responseJSON then
+    fibaro:debug("HC2 response nil.")
+    return nil, "HC2 response nil."
+  end
+  if #responseJSON == 0 then
+    fibaro:debug("HC2 response is valid, but empty")
+    return nil, "HC2 response is valid, but empty"
+  end
+  local jsonTbl
+  local code, errStr = pcall(
+    function()
+      jsonTbl= json.decode(responseJSON)
+    end
+  )
+  if not code then
+    fibaro:debug("JSON decode failed with error: "..errStr)
+    return nil, errStr
+  end
+  return jsonTbl
+end
+
+function httpError(err)
+  fibaro:Debug("HTTP call error: " .. err)
+end
+
+function call(api, processor)
+  local HC2 = net.HTTPClient()
+  HC2:request(
+    "http://127.0.0.1:11111"..api,
+    { success =processor,
+      error =  httpError,
+      options = {method = "GET" }
+    })
+end
+
+call('/api/devices/',
+  function(resp)
+    checkDevices(getMasterSlave(decode(resp.data)))
+  end)
