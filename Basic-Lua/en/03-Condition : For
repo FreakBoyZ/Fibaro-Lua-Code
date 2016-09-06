@@ -1,0 +1,26 @@
+===== Condition =====
+
+for initial variable, condition, variable change do
+  ...
+end
+
+-- try this
+
+for x = 1, 3, 1 do
+  print("add " .. x)
+end
+
+for y = 3, 1, -1 do
+  print("minus " .. y)
+end
+
+-- comment
+ex.1
+initial x = 1
+do until x = 3
+after action add 1 to x
+
+ex.2
+initial x = 3
+do until x = 1
+after action minus 1 from x
