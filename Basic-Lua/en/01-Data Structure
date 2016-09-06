@@ -1,0 +1,38 @@
+===== Variable type =====
+
+Local a; -- Nil type
+b = 10.5648; -- number type
+c = "hello"; -- string type. Also can be "10", "191.1"
+d = true; -- boolean type
+e = {1,2,3,"hello again"}; -- array type
+
+-- try this
+print(tostring(a) , b , c , tostring(d) , e[1] , e[2] , e[3] , e[4]);
+
+
+===== Array =====
+
+array = {6,7,8}
+
+-- try this
+for x = 1, #array do
+  print("Array no. " .. x .. " is " .. array[x]);
+end
+
+-- comment
+-- #array = number of data in array. In this case is 3.
+-- Array[1] = 6, Array[2] = 7, Array[3] = 8
+-- First array is [1] in lua.
+
+
+===== Table =====
+-- An array that can be indexed not only with numbers, but also with strings or any other value of the language.
+-- Can be call in many different ways.
+
+table = { ['a'] = "1" , ['b'] = 2 , c = 3 }
+
+-- try this
+print("value of table a is " .. table.a)
+print("value of table a is " .. table.['a'])
+print("value of table b is " .. table.b)
+print("value of table c is " .. table.c)
