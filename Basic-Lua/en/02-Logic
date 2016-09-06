@@ -1,0 +1,28 @@
+===== Logic =====
+
+10 == 10
+10 ~= 9
+9 < 10
+10 > 9
+9 <= 10
+10 >= 9
+
+true and true == true
+true and false == false
+false and true == false
+false and false == false
+
+true or true == true
+true or false == true
+false or true == true
+false or false == false
+
+not true == false
+
+-- comment
+== equal
+~= not equal
+< less
+> more
+<= less or equal
+>= more or equal
