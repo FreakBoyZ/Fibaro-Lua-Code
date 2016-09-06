@@ -1,0 +1,11 @@
+===== Function =====
+-- Functions can carry out a specific task like an example.
+
+-- try this
+function test(x)
+  y = x + 10;
+  return y
+end
+
+print(test(10));
+print(test(20));
