@@ -1,0 +1,35 @@
+===== Condition =====
+
+if x == then
+  ...
+end
+
+--------------------
+
+if x == 10 then
+  ...
+elseif x == 20 then
+  ...
+end
+
+--------------------
+
+if x == 10 then
+  ...
+else
+  ...
+end
+
+--------------------
+
+if x == 10 then
+	action 1
+elseif x == 20 then
+	action 2
+else
+	action 3
+end
+
+if x is 10 then do action 1
+if x is 20 then do action 2
+if x is other than 10 and 20 then do action 3
