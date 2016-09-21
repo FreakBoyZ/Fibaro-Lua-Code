@@ -1,0 +1,35 @@
+--[[
+%% properties
+1049 value
+%% globals
+--]]
+
+Status = 1049
+Relay = 1051
+CloseTime = 10 -- sec
+
+stime = 8; -- start specific time ex. 14 = 14.00--	
+etime = 15; -- end specific time ex. 15 = --15.59	
+on = false; -- หากเวลาตรงให้ true = เปิด false = ปิด	
+
+------------------------------------------------
+
+function d(message) fibaro:debug(message.." "..os.time()) end
+function s(time) fibaro:sleep(time*1000) end
+
+function turnOff(time)
+  for i=1,time do 
+    s(1)
+    if fibaro:getValue(Status, "value") == "0" then d("abort"); fibaro:abort() end
+  end
+  fibaro:call(Relay, "turnOn")
+  d("off")
+end
+
+------------------------------------------------
+local currentDate = os.date("*t"); -- get date & time	
+if on == (currentDate.hour >= stime and currentDate.hour <= etime) and
+	fibaro:getValue(Status, "value") == "1" then
+  d("run")
+  turnOff(CloseTime)
+end
