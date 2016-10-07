@@ -1,0 +1,97 @@
+--[[
+%% autostart
+%% properties
+%% events
+%% globals
+--]]
+
+-- Check every ... minutes
+
+CheckTime = 5;
+
+-- DDNS Domain name of this network
+-- Domain name ของลูกค้า
+
+DomainName = 'hcltest.homeip.net';
+
+-- Token of your DDNS username -> username:token <- in encode64
+-- Token ของ Dyndns ของคุณ โดยเอา username:token ไป encode64 มา
+-- ห้ามกด Generate Key ใน Dyndns Service มิฉะนั้นต้องทำใหม้ทุกบ้านที่ผ่านมา
+
+Bsse64token = 'Zmx0aGFpbGFuZDphMGM2NTg5NDRjZDExMWU2OWIyNDMzMTBlODAyNDQ5Zg==';
+
+-- Main Code (Do not change this part)
+-- โค้ดหลัก ห้ามทำการเปลี่ยนแปลง
+
+function UpdateIP(ip)
+	local updateip = ip;
+	fibaro:debug("IP to Update :" .. updateip);
+	local httpUpdateIP = net.HTTPClient();
+  	local urlUpdateIP = 'http://members.dyndns.org/v3/update?hostname=' .. DomainName .. '&myip=' .. updateip; 
+	fibaro:debug('Call URL : ' .. urlUpdateIP);
+  	httpUpdateIP:request(urlUpdateIP
+    ,{
+       options = {
+          method = 'GET',
+          headers = { 
+              ['Authorization'] = 'Basic ' .. Bsse64token
+          }
+      },
+      success = function(resp2)
+          if resp2.status == 200 then
+            fibaro:debug(resp2.status)
+            fibaro:debug(resp2.data);
+            
+          else
+            fibaro:debug(resp2.status)
+         
+          end
+        end
+      })
+  
+end
+
+function CheckIP()
+    local httpGetIP = net.HTTPClient()  
+    httpGetIP:request('http://icanhazip.com'
+    ,{
+       options = {
+          method = 'GET',
+          headers = {     
+          }
+      },
+      success = function(resp)
+          if resp.status == 200 then
+            resp.data = resp.data:gsub("^%s*(.-)%s*$", "%1");
+            fibaro:debug(resp.status)
+            fibaro:debug('Global IP : ' .. resp.data);
+            fibaro:setGlobal("WanIP", resp.data);
+            --fibaro:debug("check " .. resp.data)
+            UpdateIP(resp.data);
+          else
+            fibaro:debug(resp.status)
+         	fibaro:debug('Cannot connect server to get global IP!!');
+          end
+        end
+      })
+end
+
+local sourceTrigger = fibaro:getSourceTrigger();
+function tempFunc()
+local currentDate = os.date("*t");
+local startSource = fibaro:getSourceTrigger();
+  
+if (
+ ( (tonumber(os.date("%H%M")) >= tonumber(string.format("%02d%02d", "00", "00")) and tonumber(os.date("%H%M")) <= tonumber(string.format("%02d%02d", "23", "59"))) and (math.floor(os.time()/60)-math.floor(1475686800/60))%CheckTime == 0 )
+)
+then
+    CheckIP();
+end
+
+setTimeout(tempFunc, 60*1000)
+end
+
+if (sourceTrigger["type"] == "autostart") then
+	print("run");
+	tempFunc()
+end
