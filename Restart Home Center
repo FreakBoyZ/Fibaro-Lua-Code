@@ -1,0 +1,10 @@
+POST /api/settings/reboot HTTP/1.1
+Host: 127.0.0.1
+Authorization: Basic base64 (username: password)
+0x0D0x0A0x0D0x0A
+
+===== Comment =====
+base 64 encode
+https://www.base64encode.org/
+
+ใส่ 127.0.0.1 ในช่อง IP Address
