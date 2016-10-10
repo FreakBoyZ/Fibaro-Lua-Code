@@ -1,0 +1,9 @@
+GET /api/callAction?deviceID=xxx&name=wakeUpDeadDevice HTTP/1.1 
+Host: 127.0.0.1 
+Authorization: Basic Base64
+0x0D0x0A0x0D0x0A
+
+===== Comment =====
+xxx = ID ที่ต้องการ Wakeup
+Base64 = user:pass in Base 64 code
+https://www.base64encode.org/
