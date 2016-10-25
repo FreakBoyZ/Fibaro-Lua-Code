@@ -1,0 +1,33 @@
+-- Lua Command
+--fibaro:call(891, "setMode", 2); -- Cool
+--fibaro:call(889, "setThermostatSetpoint", 2, 25); -- Mode Cool, Temp 25 C
+
+-- API ปรับ Mode
+-- http://HCIP/api/callAction?deviceID={id}name=setMode&arg1={x}
+-- id = id ของอุปกรณ์ควบคุมแอร์
+-- x = หมายเลข Mode ดู code ที่ setMode Reference
+
+-- === setMode Reference ===
+-- 0 = Off
+-- 1 = Heating
+-- 2 = Cooling
+-- 5 = Resume
+-- 6 = Fan Only
+-- 8 = Dry Air
+-- 10 = Auto Changeover
+
+
+-- API ปรับอุณหภูมิ
+-- http://HCIP/api/callAction?deviceID={id}name=setThermostatSetpoint&arg1={x}&arg2={y}
+-- id = id ของอุปกรณ์ควบคุมแอร์
+-- x = หมายเลข Mode ดู code ที่ arg1
+-- y = อุณหภูมิที่ต้องการ เช่น 25
+
+-- === setThermostatSetpoint arg1 ===
+-- 1 = Heating
+-- 2 = Cooling
+-- 8 = Dry Air
+-- 10 = Auto Changeover
+
+-- === setThermostatSetpoint arg2 ===
+-- ใส่เลขอุณหภูมิได้เลยเป็นองศาระหว่าง 19-28 ** บางรุ่นอาจได้มากกว่าให้ลองทดสอบก่อน
