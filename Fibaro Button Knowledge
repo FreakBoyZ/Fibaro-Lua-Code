@@ -1,0 +1,18 @@
+--[[
+%% properties
+%% events
+917 CentralSceneEvent
+%% globals
+--]]
+
+local startSource = fibaro:getSourceTrigger()["event"]["data"];
+local startSource2 = fibaro:getSourceTrigger();
+
+fibaro:debug(startSource["keyAttribute"]);
+
+if (startSource["keyAttribute"]) == "Pressed" then
+  print("hello")
+end
+
+local jT = json.encode(startSource)
+print(jT)
