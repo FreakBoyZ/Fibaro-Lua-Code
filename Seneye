@@ -1,0 +1,44 @@
+--[[
+%% properties
+%% events
+%% globals
+--]]
+
+httpapi = 'https://api.seneye.com/v1/devices/xxx/exps?user=yyy&pwd=zzz'
+
+-- xxx = user id จาก https://api.seneye.com/v1/devices?user=yyy&pwd=zzz
+-- รูปแบบจะเป็น xxxxxnamexx ใช้ 5-6 ตัวแรกคือ ID
+-- yyy = user
+-- zzz = pass
+
+local selfhttp = net.HTTPClient({timeout=2000})
+selfhttp:request(httpapi, {
+  options={
+    headers =  {Accept = "application/json"},
+    method = 'GET',
+    timeout = 5000
+  },
+  success = function(status)
+      print "Success"
+      print(status.data)
+      
+      decode = json.decode(status.data);
+      
+      temp = decode.temperature.curr
+      ph = decode.ph.curr
+      nh3 = decode.nh3.curr
+      o2 = decode.o2.curr
+      light = decode.light.curr
+  
+      fibaro:call(1354, "setProperty", "ui.lblTemp.value", temp)
+      fibaro:call(1354, "setProperty", "ui.lblpH.value", ph)
+      fibaro:call(1354, "setProperty", "ui.lblNH3.value", nh3)
+      fibaro:call(1354, "setProperty", "ui.lblO2.value", o2)
+      fibaro:call(1354, "setProperty", "ui.lblLux.value", light)
+      
+  end,
+  error = function(error)
+    print "ERROR"
+    print(error)
+  end
+})
