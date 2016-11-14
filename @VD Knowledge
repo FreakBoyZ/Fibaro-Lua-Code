@@ -1,0 +1,5 @@
+local selfId = fibaro:getSelfId();
+ip = fibaro:getValue(selfId, 'IPAddress')
+fibaro:call(selfId, "setProperty", "ui.Label1.value", ip);
+port = fibaro:getValue(selfId, 'TCPPort')
+fibaro:call(selfId, "setProperty", "ui.Label2.value", port);
