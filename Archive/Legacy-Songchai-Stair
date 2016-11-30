@@ -1,0 +1,85 @@
+--[[
+%% properties
+38 value
+77 value
+%% globals
+--]]
+
+PIR = 38; -- Motion ID1
+PIR2 = 77; -- Motion ID1
+Lux = 40; -- Lux ID
+Relay = 81; -- Relay ID
+
+MotionTimer = 45; -- delay before turn off (sec)
+SetLux = 30; -- setting lux config
+
+local startSource = fibaro:getSourceTrigger();
+local currentDate = os.date("*t"); -- get date & time
+
+-- ถ้าอยู่ในช่วง 07.00 - 17.00 ไม่ให้เปิดไฟ Auto
+if	( string.format("%02d", currentDate.hour) > "06" 
+  and string.format("%02d", currentDate.hour) < "18" )
+then
+  fibaro:debug("ไม่อยู่ในช่วง 06.00 - 18.00 ไม่ให้เปิดไฟ Auto");
+  fibaro:abort();
+end
+
+if	(tonumber(fibaro:getValue(Lux, "value")) < SetLux ) then
+ 	-- Check time if in 13.00-14.59 
+	-- and lux < 10 then move on
+  	
+  	if (startSource['type'] == 'property') then
+        if 	tonumber(fibaro:getValue(tonumber(startSource['deviceID']), "value")) > 0  then
+            endtime = os.time() + MotionTimer -- +sec
+            fibaro:debug('OS Time : '..os.time());
+      		fibaro:debug("Motion '"..fibaro:getName(tonumber(startSource['deviceID'])).."' Breach. Add time to endtimer")
+        else
+            fibaro:abort();
+        end
+    end
+  
+    if 	( tonumber(fibaro:getValue(PIR, "value")) > 0 ) 
+    	or ( tonumber(fibaro:getValue(PIR2, "value")) > 0 ) then
+        fibaro:setGlobal("stair_endtimer", endtime) --global variable that is always changed when PIR breached 
+        fibaro:debug('Endtimer : '..fibaro:getGlobalValue("stair_endtimer"));
+    end
+  	-- check motion to add time only when breach ( not add when safe )
+  	-- add time to 'endtimer' variable
+    
+    if (fibaro:countScenes() > 1) then fibaro:abort() end --exit after another breach
+    -- prevent generating another while loop
+    
+    local startSource = fibaro:getSourceTrigger(); 
+    if 	( 
+        ( tonumber(fibaro:getValue(PIR, "value")) > 0 )
+      	or ( tonumber(fibaro:getValue(PIR2, "value")) > 0 )
+    or 
+        startSource["type"] == "other" 
+        ) 
+    then 
+        time = os.time() 
+        fibaro:call(Relay, "turnOn");
+        fibaro:debug('Relay Turn On');
+        while time < tonumber(fibaro:getGlobalValue("stair_endtimer")) do 
+            time = os.time();
+      
+      		if ( tonumber(fibaro:getValue(Lux, "value")) > SetLux ) then
+        		fibaro:call(Relay, "turnOff");
+      		else
+      			fibaro:call(Relay, "turnOn"); end
+      		-- check lux if lux change then turn on or off
+      
+            fibaro:sleep(1000); --the lower number the better precision 
+        end 
+        fibaro:call(Relay, "turnOff");
+        fibaro:debug('Relay Turn Off !!!');
+        fibaro:debug('Endtimer : '..fibaro:getGlobalValue("stair_endtimer"));
+        fibaro:debug('OS Time : '..os.time());
+        fibaro:debug('======================');
+    end
+else
+  	if ( tonumber(fibaro:getValue(Lux, "value")) > SetLux ) then
+    	fibaro:debug('Too bright'); end
+  	fibaro:debug('abort !!!');
+  	fibaro:abort();
+end
