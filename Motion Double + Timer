@@ -49,3 +49,5 @@ if fibaro:getValue(MotionID, "value") == "0" and fibaro:getValue(MotionID2, "val
   d("run")
   turnOff(CloseTime)
 end
+
+print("เวลาตรง : " .. tostring(on) .. " ช่วงเวลาทำงาน : " .. tostring(work) .. " Time is : "..thour..":"..tmin.." Start Time : "..sh(startTime)..":"..sm(startTime).." End Time : "..sh(endTime)..":"..sm(endTime))
