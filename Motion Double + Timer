@@ -1,0 +1,51 @@
+--[[
+%% properties
+38 value
+77 value
+%% globals
+--]]
+
+--=============================================================
+startTime = "18:00"; -- เวลาเปิด "00:00" - "23:59"
+endTime = "06:00"; -- เวลาปิด "00:00" - "23:59"
+MotionID = 38 
+MotionID2 = 77 
+Relay = 81
+CloseTime = 45 -- sec
+--=============================================================
+
+function d(message) fibaro:debug(message.." "..os.time()) end
+function s(time) fibaro:sleep(time*1000) end
+function ss(t) r = string.sub(t,1,2) return r end
+if ss(startTime) > ss(endTime) then on = false else on = true end
+function sh(t) r = string.sub(t,1,2) return tonumber(r) end function sm(t) r = string.sub(t,4,5) return tonumber(r) end
+local thour = tonumber(os.date("*t").hour); local tmin = tonumber(os.date("*t").min);
+work = false
+
+if (((thour > sh(startTime) and thour < sh(endTime)) or (thour == sh(startTime) and tmin >= sm(startTime)) or
+  (thour == sh(endTime) and tmin < sm(endTime))) and on) or 
+  ((thour > sh(startTime) or thour < sh(endTime) or thour == sh(startTime) and tmin >= sm(startTime) or
+  thour == sh(endTime) and tmin < sm(endTime)) and on == false) then 
+  work = true 
+end
+
+function turnOff(time)
+  for i=1,time do 
+    s(1)
+    if fibaro:getValue(Relay, "value") == "0" then d("manaul off"); fibaro:abort() end
+    if fibaro:getValue(MotionID, "value") == "1" 
+    or fibaro:getValue(MotionID2, "value") == "1" then d("abort"); fibaro:abort() end
+  end
+  fibaro:call(Relay, "turnOff")
+  d("off")
+end
+
+if fibaro:getValue(MotionID, "value") == "1" or fibaro:getValue(MotionID2, "value") == "1" then
+  fibaro:call(Relay, "turnOn")
+  d("on")
+end
+
+if fibaro:getValue(MotionID, "value") == "0" and fibaro:getValue(MotionID2, "value") == "0" then
+  d("run")
+  turnOff(CloseTime)
+end
