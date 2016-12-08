@@ -40,7 +40,7 @@ function turnOff(time)
   d("off")
 end
 
-if fibaro:getValue(MotionID, "value") == "1" or fibaro:getValue(MotionID2, "value") == "1" and work then
+if (fibaro:getValue(MotionID, "value") == "1" or fibaro:getValue(MotionID2, "value") == "1") and work then
   fibaro:call(Relay, "turnOn")
   d("on")
 end
