@@ -1,0 +1,48 @@
+--[[
+%% properties
+%% events
+%% globals
+--]]
+
+-- ############################ init ##########################
+
+-- use "todo" to re-enable wizard again
+-- use "done" do disable wizard (independant of wizard steps state)
+
+local wizardstate = "done"
+local hcip = "192.168.3.94"
+local authen = "YWRtaW46YWRtaW4="
+
+-- ############################ code ##########################
+
+fibaro:debug("wizard status before hack: " .. api.get('/wizard/finish')['wizard']['status'])
+
+local steps = api.get('/wizard/steps')
+
+fibaro:debug("localUser wizard status: " .. steps.localUser.status)
+fibaro:debug("remoteUser wizard status: " .. steps.remoteUser.status)
+fibaro:debug("update wizard status: " .. steps.update.status)
+fibaro:debug("alarm wizard status: " .. steps.alarm.status)
+fibaro:debug("localization wizard status: " .. steps.localization.status)
+fibaro:debug("devices wizard status: " .. steps.devices.status)
+fibaro:debug("hcname wizard status: " .. steps.hcname.status)
+
+local wizard = { status = wizardstate }
+data = json.encode(wizard)
+
+local http = net.HTTPClient();
+http:request("http://" .. hcip .. "/api/wizard/finish",{
+      options = {
+      method = "POST",
+      headers = {
+		["Content-Type"] = "application/x-www-form-urlencoded",
+		["User-Agent"] = "Mozilla/4.0 (compatible;)",
+        ["Authorization"] = "Basic " .. authen
+		},
+      data = data
+      },
+  success = function(response) end,
+  error = function(err) fibaro:debug("Error: " .. err) end
+})
+
+fibaro:debug("please logout and login again to apply wizard changes")
