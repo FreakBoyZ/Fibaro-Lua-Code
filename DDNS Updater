@@ -95,3 +95,5 @@ if (sourceTrigger["type"] == "autostart") then
 	print("run");
 	tempFunc()
 end
+
+-- Zmx0aGFpbGFuZDphMGM2NTg5NDRjZDExMWU2OWIyNDMzMTBlODAyNDQ5Zg==
