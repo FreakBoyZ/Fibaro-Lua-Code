@@ -19,7 +19,6 @@ DomainName = 'hcltest.homeip.net';
 -- ห้ามกด Generate Key ใน Dyndns Service มิฉะนั้นต้องทำใหม้ทุกบ้านที่ผ่านมา
 
 Bsse64token = 'token';
--- เช่น 'Zmx0aGFpbGFuZDphMGM2NTg5NDRjZDExMWU2OWIyNDMzMTBlODAyNDQ5Zg=='
 
 -- Main Code (Do not change this part)
 -- โค้ดหลัก ห้ามทำการเปลี่ยนแปลง
@@ -96,5 +95,3 @@ if (sourceTrigger["type"] == "autostart") then
 	print("run");
 	tempFunc()
 end
-
--- 'Zmx0aGFpbGFuZDphMGM2NTg5NDRjZDExMWU2OWIyNDMzMTBlODAyNDQ5Zg=='
