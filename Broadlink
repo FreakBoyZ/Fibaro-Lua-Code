@@ -1,0 +1,35 @@
+--[[
+%% properties
+%% events
+%% globals
+--]]
+
+--
+function CallAPI()
+	local httpRequest = net.HTTPClient();
+  	local url = 'http://192.168.3.36:7474';
+    
+    local jsonData = { api_id = 1004
+        ,command = "send_code" 
+		,mac = "00:11:22:33:44:55"
+		,data = "e90b3400091f091f091f0a1f0920091f0920091f091f092009201c0c09201c0c0820092008201c0d09201c0c0820092008201d0c0900013300000000"
+	}
+    data = json.encode(jsonData);
+  
+  	httpRequest:request(url
+    ,{
+       options = {
+          method = 'POST',
+          headers = { },
+          data = data
+      },
+      success = function(response)
+        fibaro.debug(response);
+      	--fibaro:debug("Code : " .. response.code);
+      	--fibaro:debug("Msg : " .. response.msg);
+      end
+      });
+  
+end
+  
+CallAPI();
