@@ -1,0 +1,41 @@
+--[[
+%% autostart
+%% properties
+%% events
+%% globals
+--]]
+
+fibaro:debug('Start')
+local sourceTrigger = fibaro:getSourceTrigger()
+
+if (fibaro:countScenes() > 1) then
+    fibaro:abort();
+  end
+
+if (sourceTrigger["type"] == "autostart") then
+    while true do
+        fibaro:debug('Scene automatically called.')
+
+        local currentDate = os.date("*t");
+
+        -- Reboot between 4:00 and 4:02
+        if ((currentDate.hour == 4 ) and (currentDate.min > 0 and currentDate.min < 2))
+        then
+            fibaro:debug('Reboot at ' .. (currentDate.hour) .. ':' .. (currentDate.min))
+			HomeCenter.SystemService.reboot();
+        end
+
+        fibaro:sleep(60000); -- Run every 1 minute
+    end
+else
+
+    local currentDate = os.date("*t");
+    local startSource = fibaro:getSourceTrigger();
+    if (startSource["type"] == "other")
+    then
+    	fibaro:debug('Scene started manually')
+    	fibaro:debug('Reboot at ' .. (currentDate.hour) .. ':' .. (currentDate.min))
+        HomeCenter.SystemService.reboot();
+
+end
+end
