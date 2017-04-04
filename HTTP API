@@ -1,0 +1,13 @@
+Relay
+/api/callAction?deviceID=xxx&name=turnOn
+
+VD
+/api/callAction?deviceID=xxx&name=pressButton&arg1=xxx
+
+AC
+on /api/callAction?deviceID=xxx&name=setThermostatSetpoint&arg1=10&arg2=25
+off /api/callAction?deviceID=xxx&name=setMode&arg1=0
+temp /api/callAction?deviceID=xxx&name=setThermostatSetpoint&arg1=10&arg2=TEMP(19-28)
+
+Scene
+/api/sceneControl?id=xxx&action=start
