@@ -11,3 +11,58 @@ temp /api/callAction?deviceID=xxx&name=setThermostatSetpoint&arg1=10&arg2=TEMP(1
 
 Scene
 /api/sceneControl?id=xxx&action=start
+
+
+====================================================================================
+Devices:
+ID = device ID
+name = action
+arg1 = (e.g. value dimmer)
+http:///api/callAction?deviceID=4&name=turnOff
+http:///api/callAction?deviceID=7&name=setValue&arg1=39
+
+Virtual Devices
+ID = device ID
+arg1 = button ID
+arg2 = slider value (only for slider)
+http:///api/callAction?deviceID=15&name=pressButton&arg1=2
+http:///api/callAction?deviceID=51&name=setSlider&arg1=8&arg2=30
+
+Notification
+ID = Device (Iphone, e-mail et cetera)
+arg1 = Notification template
+http:///api/callActiondeviceID=9&name=sendDefinedPushNotification&arg1=1
+
+Arm/Disarm devices
+arg1 = 1 - Armed
+arg1 = 0 - Disarmed
+http:///api/callAction?deviceID=51&&name=setArmed&arg1=0
+
+Scene
+ID = SceneID
+http:///api/sceneControl?id=14&action=start
+http:///api/sceneControl?id=14&action=stop
+
+Get json status from api:
+http:///api/rooms
+http:///api/scenes
+http:///api/devices
+http:///api/devices?id=316 # Specific value of a device
+http:///api/virtualDevices
+http:///api/globalVariables
+http:///api/weather
+http:///api/sections
+http:///api/users
+http:///api/energy/now-3600/now/single/devices/power/58
+
+Updates used by mobile:
+http:///api/mobile/interface/refreshStates?last=3058
+
+Reboot:
+Post --> http:///api/settings/reboot
+
+etc.
+change variabele example:
+Unfortunately will not trigger scene (yet):
+curl -X PUT -d '{"name": "Test", "value": "122"}'  http://admin:admin@192.168.1.104/api/globalVariables 
+====================================================================================
