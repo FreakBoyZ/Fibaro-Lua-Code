@@ -1,0 +1,17 @@
+--[[
+%% properties
+5 value
+--]]
+
+Card = 5 -- ID ของ Card Reader (ใส่ด้านบนก่อนหน้า value ด้วย)
+Relay = {7,9,165} -- ID Relay ที่ต้องการเปิด
+
+if tonumber(fibaro:getValue(Card, "value")) > 0 then
+  
+  for i=1 ,#Relay do
+    setTimeout(function()
+		fibaro:call(Relay[i], "turnOn");
+  	end, i*1000)
+  end
+  
+end
