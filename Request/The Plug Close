@@ -1,0 +1,18 @@
+--[[
+%% properties
+5 value
+--]]
+
+Card = 5 -- ID ของ Card Reader (ใส่ด้านบนก่อนหน้า value ด้วย)
+Relay = {7,9,165,166,168} -- ID Relay ที่ต้องการปิด
+
+if tonumber(fibaro:getValue(Card, "value")) == 0 then
+  for i=1 ,#Relay do
+    setTimeout(function()
+		if fibaro:getValue(Relay[i], "value") == "1" then
+          fibaro:call(Relay[i], "turnOff");
+        end
+  	end, i*0.5*1000)
+  end
+  
+end
