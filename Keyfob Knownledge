@@ -1,0 +1,29 @@
+--[[
+%% properties
+%% events
+429 CentralSceneEvent
+%% globals
+--]]
+
+local startSource = fibaro:getSourceTrigger()["event"]["data"];
+local startSource2 = fibaro:getSourceTrigger();
+
+--print(startSource["keyAttribute"]);
+--print(startSource["keyId"])
+
+if (startSource["keyId"]) == 5 then
+	if (startSource["keyAttribute"]) == "Pressed" then
+  		print("5-1")
+	elseif (startSource["keyAttribute"]) == "Pressed2" then
+  		print("5-2")
+    elseif (startSource["keyAttribute"]) == "Pressed2" then
+  		print("5-3")
+  	elseif (startSource["keyAttribute"]) == "HeldDown" then
+  		print("5-4")
+	end
+end
+
+local jT = json.encode(startSource)
+local jT2 = json.encode(startSource2)
+--print(jT)
+--print(jT2)
