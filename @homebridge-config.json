@@ -2,8 +2,8 @@
     "bridge": {
         "name": "Homebridge",
         "username": "CC:22:3D:E3:CE:30",
-        "port": 51826,
-        "pin": "031-45-154"
+        "port": 51827,
+        "pin": "031-45-457"
     },
     
     "description": "This is an example configuration file. You can use this as a template for creating your own configuration file.",
