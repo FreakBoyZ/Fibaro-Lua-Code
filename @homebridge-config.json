@@ -13,11 +13,11 @@
             "platform": "FibaroHC2",
             "name": "FibaroHC2",
             "host": "192.168.3.220",
-            "username": "homebridge",
-            "password": "future1234",
+            "username": "admin",
+            "password": "admin",
             "pollerperiod": "2",
             "securitysystem": "disabled",
-            "switchglobalvariables": "",
+            "switchglobalvariables": "Air",
             "thermostattimeout": "0",
             "enablecoolingstatemanagemnt": "on"
         }
