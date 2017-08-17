@@ -1,0 +1,29 @@
+--[[
+%% properties
+xxx value
+xxx value
+xxx value
+%% globals
+--]]
+
+-- ^^ ใส่ ID Sensor ทุกๆจุดที่ต้องการ
+
+function pushMessage(m) 
+  for i=1,1000 do 
+    if(fibaro:get(i, "Push") == "1") then 
+      print(i);
+      fibaro:call(i, "sendPush", m);
+    end 
+  end 
+end
+
+local trigger = fibaro:getSourceTrigger();
+local MID = trigger['deviceID'];
+local MN = fibaro:getName(MID);
+local getMV = tonumber(fibaro:getValue(tonumber(trigger['deviceID']), "value"));
+local getMA = tonumber(fibaro:getValue(tonumber(trigger['deviceID']), "armed"));
+
+if getMV == 1 and getMA == 1 then
+  pushMessage(MN .. " " .. "ถูกบุกรุก");
+  print(MN .. " " .. "ถูกบุกรุก");
+end
