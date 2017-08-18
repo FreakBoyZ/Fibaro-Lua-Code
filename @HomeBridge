@@ -2,7 +2,7 @@
 curl -sSL goo.gl/Ksdhph | bash
 
 ลง Plugin
-npm install -g homebridge-fibaro-hc2
+sudo npm install -g homebridge-fibaro-hc2
 
 นำไฟล์ config.json ไปใส่ใน /home/pi/.homebridge
 https://github.com/ilcato/homebridge-Fibaro-HC2/blob/master/config.json
@@ -15,13 +15,13 @@ https://gist.github.com/johannrichard/0ad0de1feb6adb9eb61a/#file-homebridge
 ไฟล์ homebridge แก้ที่ HOMEBRIDGE_OPTS=-U /home/pi/.homebridge
 ไฟล์ homebridge.service แก้ User=pi
 
-systemctl daemon-reload
-systemctl enable homebridge
-systemctl start homebridge
+sudo systemctl daemon-reload
+sudo systemctl enable homebridge
+sudo systemctl start homebridge
 
 เพิ่มเติม
-systemctl stop homebridge
-systemctl status homebridge
+sudo systemctl stop homebridge
+sudo systemctl status homebridge
 
 ดู process
 ps -A
