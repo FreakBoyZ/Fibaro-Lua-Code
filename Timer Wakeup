@@ -1,0 +1,26 @@
+--[[
+%% autostart
+%% properties
+%% globals
+--]]
+
+startTime = "02:00"; -- เวลาเปิด
+
+--=========================================================
+local sourceTrigger = fibaro:getSourceTrigger();
+local startSource = fibaro:getSourceTrigger();
+
+function tempFunc()
+    local currentDate = os.date("*t");
+
+  	if string.format("%02d", currentDate.hour) .. ":" .. string.format("%02d", currentDate.min) == startTime then
+    	fibaro:call(1, 'wakeUpAllDevices');
+  	end
+    
+    setTimeout(tempFunc, 60*1000)
+end
+
+if (sourceTrigger["type"] == "autostart") then
+	tempFunc()
+end
+
