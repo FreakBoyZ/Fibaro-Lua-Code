@@ -3,3 +3,15 @@ ip = fibaro:getValue(selfId, 'IPAddress')
 fibaro:call(selfId, "setProperty", "ui.Label1.value", ip);
 port = fibaro:getValue(selfId, 'TCPPort')
 fibaro:call(selfId, "setProperty", "ui.Label2.value", port);
+
+-- Set Icon --
+fibaro:call(selfId, "setProperty", "currentIcon", 1002);
+
+-- HTTP Connect --
+fibaroconnect = Net.FHttp('test.dyndns.org', 1111);
+fibaroconnect:setBasicAuthentication('admin', 'admin'); 
+local response ,status, err = fibaroconnect:GET("/api/devices?id=5");
+
+-- Decode JSON --
+resp = json.decode(response);
+fibaro:debug(resp.properties.value);
