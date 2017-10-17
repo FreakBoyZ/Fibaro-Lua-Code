@@ -16,7 +16,7 @@ DomainName = 'hcltest.homeip.net';
 
 -- Token of your DDNS username -> username:token <- in encode64
 -- Token ของ Dyndns ของคุณ โดยเอา username:token ไป encode64 มา
--- ห้ามกด Generate Key ใน Dyndns Service มิฉะนั้นต้องทำใหม้ทุกบ้านที่ผ่านมา
+-- ห้ามกด Generate Key ใน Dyndns Service มิฉะนั้นต้องทำใหม่ทุกบ้านที่ผ่านมา
 
 Bsse64token = 'token';
 
