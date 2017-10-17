@@ -13,6 +13,8 @@ local wizardstate = "done"
 local hcip = "192.168.3.94"
 local authen = "YWRtaW46YWRtaW4="
 
+-- authen ของคุณ โดยเอา username:password ไป encode64 มา
+
 -- ############################ code ##########################
 
 fibaro:debug("wizard status before hack: " .. api.get('/wizard/finish')['wizard']['status'])
