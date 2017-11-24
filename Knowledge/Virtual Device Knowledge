@@ -15,3 +15,20 @@ local response ,status, err = fibaroconnect:GET("/api/devices?id=5");
 -- Decode JSON --
 resp = json.decode(response);
 fibaro:debug(resp.properties.value);
+
+-- GET POST PUT DELETE --
+virtualId = fibaro:getSelfId();
+name = fibaro:getName(virtualId);
+fibaroconnect = Net.FHttp('127.0.0.1', 11111);
+fibaroconnect:setBasicAuthentication('admin', 'admin'); 
+
+local response ,status, err = fibaroconnect:GET("/api/globalVariables/" .. name);
+fibaro:debug(status .. " " .. response);
+
+data = '{"name":"' .. name .. '","value":"0"}';
+local response ,status, err = fibaroconnect:POST("/api/globalVariables",data);
+
+data = '{"name":"' .. name .. '","value":"5"}';
+local response ,status, err = fibaroconnect:PUT("/api/globalVariables/" .. name,data);
+
+local response ,status, err = fibaroconnect:DELETE("/api/globalVariables/" .. name);
