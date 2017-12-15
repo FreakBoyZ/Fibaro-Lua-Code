@@ -1,0 +1,26 @@
+--[[
+%% properties
+xxx value
+%% globals
+--]]
+
+-- ^^^ แทน xxx ด้วย ID sensor ที่ต้องการ
+
+sensorID = xxx; -- ID sensor ที่ต้องการ ตรงกับด้านบน
+NotificationMessage = "your message here"; -- ใส่ข้อความที่ต้องการส่งที่นี่
+
+-- Mobile ID Updater
+function BroadcastPushMessage(message)
+  for i=1,1000 do
+  device = fibaro:get(i, "Push");
+  --fibaro:debug(device);
+  if(device == "1") then 
+      fibaro:debug(i);
+      fibaro:call(tonumber(i), "sendPush", message);
+  end
+  end
+end
+
+if (fibaro:getValue(sensorID, "value") == "1" and fibaro:getValue(sensorID, "armed") == "1") then 
+  BroadcastPushMessage(NotificationMessage); 
+end
