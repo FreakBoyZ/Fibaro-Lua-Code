@@ -12,8 +12,8 @@ temp /api/callAction?deviceID=xxx&name=setThermostatSetpoint&arg1=10&arg2=TEMP(1
 Scene
 /api/sceneControl?id=xxx&action=start
 
-
 ====================================================================================
+
 Devices:
 ID = device ID
 name = action
@@ -61,8 +61,6 @@ http:///api/mobile/interface/refreshStates?last=3058
 Reboot:
 Post --> http:///api/settings/reboot
 
-etc.
 change variabele example:
 Unfortunately will not trigger scene (yet):
 curl -X PUT -d '{"name": "Test", "value": "122"}'  http://admin:admin@192.168.1.104/api/globalVariables 
-====================================================================================
