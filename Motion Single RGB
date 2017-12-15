@@ -1,15 +1,16 @@
 --[[
 %% properties
-112 value
-263 value
+xxx value
 %% globals
 --]]
 
--- เปลี่ยน ID ของ Motion สีเทาๆด้านบนด้วย
+-- ^^ เปลี่ยน ID ของ Motion สีเทาๆด้านบนด้วย
 
-MotionID1 = 112 -- ID ของ Motion
-Relay = 13 -- ID ของ RGB
-CloseTime = 45 -- sec
+MotionID1 = xxx -- ID ของ Motion
+Relay = xxx -- ID ของ RGB
+CloseTime = 60 -- sec
+
+===============================================================================================
 
 function d(message) fibaro:debug(message.." "..os.time()) end
 function s(time) fibaro:sleep(time*1000) end
