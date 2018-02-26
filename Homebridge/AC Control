@@ -21,4 +21,14 @@ end
 === การเปิด/ปิด ===
 
 สร้าง GlobalVariable มาเพื่อรับสถานะเปิด-ปิด
-แล้วนำไปสั่ง air อีกต่อหนึง
+แล้วนำไปสั่ง air อีกต่อหนึงผ่านทาง VD
+
+if fibaro:getGlobalValue("Air") == "true" then
+  fibaro:call(550, "setMode", "2")
+  fibaro:debug("on")
+  fibaro:setGlobal("Air", "standby")
+elseif fibaro:getGlobalValue("Air") == "false" then
+  fibaro:call(550, "setMode", "0")
+  fibaro:debug("off")
+  fibaro:setGlobal("Air", "standby")
+end
