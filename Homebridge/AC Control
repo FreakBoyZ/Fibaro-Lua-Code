@@ -1,0 +1,24 @@
+=== การปรับอุณหภูมิ ===
+
+สร้าง Scene มาเพื่อรับ Temp mode heating แล้วเปลี่ยนเป็น cooling
+
+example :
+
+--[[
+%% properties
+548 value
+%% events
+%% globals
+--]]
+
+fibaro:sleep(1000)
+if fibaro:getValue(548, "mode") == "1" then
+  fibaro:call(548, "setThermostatSetpoint", "2", fibaro:getValue(548, "value"))
+end
+
+
+
+=== การเปิด/ปิด ===
+
+สร้าง GlobalVariable มาเพื่อรับสถานะเปิด-ปิด
+แล้วนำไปสั่ง air อีกต่อหนึง
