@@ -1,0 +1,39 @@
+===== LUA Path =====
+
+--[[
+%% properties
+5 value
+7 value
+%% events
+%% globals
+--]]
+
+fibaro:setGlobal("NameTTS", "ภาคภูมิ")
+Cname = fibaro:getGlobal("NameTTS")
+
+local trigger = fibaro:getSourceTrigger();
+name = fibaro:getName(tonumber(trigger['deviceID']))
+
+if (tonumber(fibaro:getValue(tonumber(trigger['deviceID']), "value")) == 1) then
+	fibaro:setGlobal("TTS", "ยินดีต้อนรับคุณ" .. Cname .. "ค่ะ")
+elseif (tonumber(fibaro:getValue(tonumber(trigger['deviceID']), "value")) == 0) then
+	fibaro:setGlobal("TTS", "ราตรีสวัสดิ์ค่ะคุณ" .. Cname )
+end
+
+fibaro:call(126, "pressButton", "1");
+
+===============================
+
+===== Virtual Device Path =====
+
+tcpSocket = Net.FTcpSocket("192.168.3.37", 5150); 
+tcpSocket:setReadTimeout(1000); 
+--fibaro:log(tcpSocket);
+text = fibaro:getGlobalValue("TTS");
+tcpSocket:write(text .. "\r"); 
+--tcpSocket:write("\r");
+--tcpSocket:close();
+
+=================================
+
+Must include global as in the scene. (ex. "TTS")
