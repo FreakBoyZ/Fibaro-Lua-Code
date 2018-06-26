@@ -1,0 +1,31 @@
+--[[
+%% properties
+140 value
+--]]
+--=============================================================
+startTime = "14:16"; -- เวลาเปิด "00:00" - "23:59"
+endTime = "09:17"; -- เวลาปิด "00:00" - "23:59"
+MotionID = 140 -- ไอดีเซนเซอร์ที่ต้องการ
+SceneID = 184 -- ไอดีไฟที่ต้องการเปิด
+--=============================================================
+function d(message) fibaro:debug(message.." "..os.time()) end
+function s(time) fibaro:sleep(time*1000) end
+function ss(t) r = string.sub(t,1,2) return r end
+if ss(startTime) > ss(endTime) then on = false else on = true end
+function sh(t) r = string.sub(t,1,2) return tonumber(r) end function sm(t) r = string.sub(t,4,5) return tonumber(r) end
+local thour = tonumber(os.date("*t").hour); local tmin = tonumber(os.date("*t").min);
+work = false
+
+if (((thour > sh(startTime) and thour < sh(endTime)) or (thour == sh(startTime) and tmin >= sm(startTime)) or
+  (thour == sh(endTime) and tmin < sm(endTime))) and on) or 
+  ((thour > sh(startTime) or thour < sh(endTime) or thour == sh(startTime) and tmin >= sm(startTime) or
+  thour == sh(endTime) and tmin < sm(endTime)) and on == false) then 
+  work = true 
+end
+
+if fibaro:getValue(MotionID, "value") == "1" and work then
+  fibaro:startScene(SceneID)
+  d("on")
+end
+
+print("เวลาตรง : " .. tostring(on) .. " ช่วงเวลาทำงาน : " .. tostring(work) .. " Time is : "..thour..":"..tmin.." Start Time : "..sh(startTime)..":"..sm(startTime).." End Time : "..sh(endTime)..":"..sm(endTime))
