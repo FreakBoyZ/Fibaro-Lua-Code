@@ -36,6 +36,10 @@ fibaro:killScenes(xx);
 fibaro:setSceneEnabled(xx, true);
 fibaro:setSceneEnabled(xx, false);
 
+(TRIGGER_AND_MANUAL, MANUAL_ONLY, DISABLED)
+fibaro:setSceneRunConfig(xx, 'TRIGGER_AND_MANUAL');
+
+
 // Timer Example //
 local currentDate = os.date("*t");
 -- ตัวอย่างการใช้
