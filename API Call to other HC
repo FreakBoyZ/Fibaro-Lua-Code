@@ -1,0 +1,37 @@
+--[[
+%% properties
+%% events
+%% globals
+--]]
+
+Bsse64token = 'YWRtaW46YWRtaW4='; -- Encode "admin:admin" from https://www.base64encode.org/
+DDNS = 'http://yourddns.dyndns.org';
+Port = '1111'
+DeviceID = 265;
+
+function Run()
+	local httpUpdateIP = net.HTTPClient();
+    local url = DDNS .. ':' .. Port .. '/api/callAction?deviceID=' .. DeviceID .. '&name=turnOn';
+	fibaro:debug('Call URL : ' .. url);
+  	httpUpdateIP:request(url
+    ,{
+       options = {
+          method = 'GET',
+          headers = { 
+              ['Authorization'] = 'Basic ' .. Bsse64token
+          }
+      },
+      success = function(resp2)
+          if resp2.status == 200 then
+            fibaro:debug(resp2.status)
+            fibaro:debug(resp2.data);
+            
+          else
+            fibaro:debug(resp2.status)
+          end
+        end
+      })
+  
+end
+
+Run()
