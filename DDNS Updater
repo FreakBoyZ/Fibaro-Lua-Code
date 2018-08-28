@@ -53,7 +53,7 @@ end
 
 function CheckIP()
     local httpGetIP = net.HTTPClient()  
-    httpGetIP:request('http://icanhazip.com'
+    httpGetIP:request('http://ipv4.icanhazip.com/'
     ,{
        options = {
           method = 'GET',
