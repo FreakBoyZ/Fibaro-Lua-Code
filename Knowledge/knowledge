@@ -1,3 +1,6 @@
+// Change HC Name //
+http://HC_ip/fibaro/en/wizard/?steps=hcname
+
 // Custom Function //
 function debug(message) fibaro:debug(message) end
 function sleep(time) fibaro:sleep(time*1000) end
