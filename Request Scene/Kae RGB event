@@ -1,0 +1,51 @@
+--[[
+%% properties
+%% events
+%% globals
+--]]
+
+ip = "10.0.0.250";
+id = 1061;
+from = os.time{year=2019, month=1, day=23}
+to = os.time{year=2019, month=1, day=24}
+Bsse64token = 'a2FlMnBsYXlAZ21haWwuY29tOkhvbWU2OTk2';
+
+function UpdateIP()
+	
+	local httpUpdateIP = net.HTTPClient();
+  	local urlUpdateIP = 'http://' .. ip .. '/api/panels/event?from=' .. from .. '&to=' .. to .. '&deviceID=' .. id; 
+	
+  	httpUpdateIP:request(urlUpdateIP
+    ,{
+       options = {
+          method = 'GET',
+          headers = { 
+              ['Authorization'] = 'Basic ' .. Bsse64token
+          }
+      },
+      success = function(resp2)
+          if resp2.status == 200 then
+            --fibaro:debug(resp2.status)
+            --fibaro:debug(resp2.data);
+          	data = json.decode(resp2.data);
+          
+          
+          	for i, v in pairs(data) do
+              if v.id then
+              	if tonumber(v.newValue) > 0 and tonumber(v.oldValue) == 0 then
+              		print(os.date("%c", v.timestamp))
+                end
+              end
+            end
+          
+          
+          else
+            fibaro:debug(resp2.status)
+          end
+        end
+      })
+  
+end
+
+UpdateIP()
+
