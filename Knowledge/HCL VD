@@ -1,0 +1,15 @@
+for GET
+
+GET /api/callAction?deviceID=62&name=setProperty&arg1=ui.Label1.value&arg2=test HTTP/1.1
+Host: 127.0.0.1
+Authorization: Basic cGR1cmJhamxvQGl0Lnnnnnnnnnnnnnnnnnnnnnnnn﻿
+
+for PUT
+
+PUT /api/globalVariables/Symulator HTTP/1.1
+
+Host: 127.0.0.1
+Authorization: Basic cGR1cmJhamxvQGl0Lnnnnnnnnnnnnnnnnnnnnnnnn
+{"name":"Symulator","value":"1"}
+
+and 127.0.0.1  11111 in device property.
