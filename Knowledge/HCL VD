@@ -13,3 +13,5 @@ Authorization: Basic cGR1cmJhamxvQGl0Lnnnnnnnnnnnnnnnnnnnnnnnn
 {"name":"Symulator","value":"1"}
 
 and 127.0.0.1  11111 in device property.
+
+GET /api/callAction?deviceID=5&name=turnOn HTTP / 1.10x0D0x0AHost: <192.168.3.220: 80> 0x0D0x0AAuthorization: Basic YWRtaW46YWRtaW4 = 0x0D0x0A0x0D0x0A
