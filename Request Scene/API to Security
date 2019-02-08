@@ -1,0 +1,35 @@
+--[[
+%% properties
+%% events
+%% globals
+--]]
+
+Bsse64token = 'Zmx0ZWFtdGhAZ21haWwuY29tOkZ1dHVyZTEyMyE='; -- Encode "admin:admin" from https://www.base64encode.org/
+DDNS = 'http://yourdomain.dyndns.org';
+Port = 'your port'
+SceneID = xx;
+
+function Run()
+	local httpUpdateIP = net.HTTPClient();
+  	local url = DDNS .. ':' .. Port .. '/api/sceneControl?id=' .. SceneID .. '&action=start';
+	fibaro:debug('Call URL : ' .. url);
+  	httpUpdateIP:request(url
+    ,{
+       options = {
+          method = 'GET',
+          headers = { 
+              ['Authorization'] = 'Basic ' .. Bsse64token
+          }
+      },
+      success = function(resp2)
+          if resp2.status == 200 then
+            fibaro:debug(resp2.status)
+          else
+            fibaro:debug(resp2.status)
+          end
+        end
+      })
+  
+end
+
+Run()
