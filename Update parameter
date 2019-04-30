@@ -1,0 +1,30 @@
+--[[
+%% properties
+%% globals
+--]] 
+ 
+function changeParameter(deviceid,set_parameter,set_size,set_value)
+  local http = net.HTTPClient()
+  http:request("http://127.0.0.1:11111/api/devices/"..deviceid, {
+    options = {
+    method = 'PUT',
+    headers = {},
+    data = '{"properties":{"parameters":[{"id":'..set_parameter..',"size":'..set_size..',"value":'..set_value..'}}]}',
+    timeout = 10000
+  },
+  success = function(response)
+            local result = response.data;
+            if response.status == 200 or response.status == 201 then
+              fibaro:debug('Status: ' ..response.status.. ' - Changed parameters')
+            else
+              fibaro:debug('Error: ' ..response.status.. ' - Access Denied')
+            end
+            end,
+  error = function(err)
+          fibaro:debug('[ERROR] ' .. err)
+          end
+  })
+end
+
+--changeParameter(ID,parameter,size,value);
+--ex. changeParameter(5,27,2,74);
