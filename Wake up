@@ -1,0 +1,42 @@
+--[[
+%% autostart
+%% properties
+%% weather
+%% events
+%% globals
+--]]
+
+ID = {265,1099} -- input ID of your choice
+timeout = 5 -- loop every minute
+
+function wakeup(ID)
+    local httpGetIP = net.HTTPClient()  
+    httpGetIP:request('http://127.0.0.1:11111/api/callAction?deviceID=' .. ID .. '&name=wakeUpDeadDevice'
+    ,{
+       options = {
+          method = 'GET',
+          headers = {     
+          }
+      },
+      success = function(resp)
+          if resp.status == 200 then
+            fibaro:debug(resp.status)
+          else
+            fibaro:debug(resp.status)
+          end
+        end
+      })
+end
+
+local sourceTrigger = fibaro:getSourceTrigger();
+function tempFunc()
+	for i=1 ,#ID do
+  		wakeup(ID[i]);
+	end
+setTimeout(tempFunc, timeout*60*1000)
+end
+
+if (sourceTrigger["type"] == "autostart") then
+	tempFunc()
+end
+
