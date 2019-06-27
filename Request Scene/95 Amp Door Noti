@@ -1,0 +1,29 @@
+--[[
+%% properties
+1245 value
+%% globals
+--]]
+
+-- ^^ ใส่ id Door sensor ด้านบนด้วยอีกตำแหน่ง
+
+DoorID = 1245 -- ใส่ id Door sensor
+CloseTime = 300 -- ใส่เวลาที่ต้องการเป็น วินาที
+minTime = (CloseTime/60);
+
+function d(message) fibaro:debug(message.." "..os.time()) end
+function s(time) fibaro:sleep(time*1000) end
+function pushMessage(m) for i=1,1000 do if(fibaro:get(i, "Push") == "1") then fibaro:call(i, "sendPush", m) end end end
+
+function CheckOff(time)
+  for i=1,time do 
+    s(1)
+    if fibaro:getValue(DoorID, "value") == "0" then d("abort"); fibaro:abort() end
+  end
+  pushMessage("ประตูเปิดเกิน " .. minTime .. " นาทีแล้ว")
+  d("noti")
+end
+
+if fibaro:getValue(DoorID, "value") == "1" then
+  d("run")
+  CheckOff(CloseTime)
+end
