@@ -1,0 +1,17 @@
+--[[
+%% properties
+xxx value
+yyy value
+%% events
+%% globals
+--]]
+
+-- ^^ ใส่ relay double ด้านบนทั้งคู่
+
+Relay = xxx -- ตัว Single ที่ต้องการ
+
+if fibaro:getValue(Relay, "value") == "1" then
+  fibaro:call(Relay, "turnOff")
+elseif fibaro:getValue(Relay, "value") == "0" then
+  fibaro:call(Relay, "turnOn")
+end
