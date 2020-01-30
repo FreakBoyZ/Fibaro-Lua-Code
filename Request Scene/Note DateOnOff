@@ -1,0 +1,53 @@
+--[[
+%% autostart
+%% properties
+%% events
+%% globals
+--]]
+
+time1 = "2020-01-30 16:38"
+relay1 = 9; -- relay ID
+relayT1 = 1; -- min
+
+time2 = "2020-01-30 16:39"
+relay2 = 11; -- relay ID
+relayT2 = 1; -- min
+
+time3 = "2020-01-30 16:34"
+relay3 = 15; -- relay ID
+relayT3 = 1; -- min
+
+local sourceTrigger = fibaro:getSourceTrigger();
+
+function tempFunc()
+local currentDate = os.date("*t");
+checkTime = string.format("%04d-%02d-%02d %02d:%02d", currentDate.year, currentDate.month, currentDate.day, currentDate.hour, currentDate.min)
+  
+if (checkTime == time1) then
+	fibaro:call(relay1, "turnOn");
+	setTimeout(function()
+		fibaro:call(relay1, "turnOff");
+	end, relayT1*60*1000)
+end
+  
+if (checkTime == time2) then
+	fibaro:call(relay2, "turnOn");
+	setTimeout(function()
+		fibaro:call(relay2, "turnOff");
+	end, relayT2*60*1000)
+end
+  
+if (checkTime == time3) then
+	fibaro:call(relay3, "turnOn");
+	setTimeout(function()
+		fibaro:call(relay3, "turnOff");
+	end, relayT3*60*1000)
+end
+
+print(checkTime);
+setTimeout(tempFunc, 60*1000)
+end
+
+if (sourceTrigger["type"] == "autostart") then
+	tempFunc()
+end
