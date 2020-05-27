@@ -1,0 +1,19 @@
+--[[
+%% properties
+99 value
+%% events
+%% globals
+--]]
+
+--^^ แก้เลข value ด้านบนให้เป็น ID ของ Switch
+
+LightA = 113; -- ID Lighting A
+LightB = 115; -- ID Lighting B
+
+if fibaro:getValue(LightA, "value") == "1" or fibaro:getValue(LightB, "value") == "1" then
+  	fibaro:call(LightA, "turnOff");
+	fibaro:call(LightB, "turnOff");
+else
+	fibaro:call(LightA, "turnOn");
+	fibaro:call(LightB, "turnOn");
+end
