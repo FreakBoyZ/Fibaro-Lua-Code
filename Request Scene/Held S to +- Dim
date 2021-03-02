@@ -1,0 +1,44 @@
+--[[
+%% properties
+%% weather
+%% events
+273 CentralSceneEvent 1 HeldDown
+273 CentralSceneEvent 1 Released
+%% globals
+--]]
+
+-- ^^ เปลี่ยนด้านบนเป็น ID ของ Scene control ที่ต้องการ
+dimID = 280 -- เปลี่ยนเป็น ID ที่ต้องการคุม เช่น ID ของ Dimmer หรือ RGB ช่องนั้นๆ
+
+
+
+
+-- ============ Main Code ==============
+threshold = 50
+step = 3
+if fibaro:countScenes() > 1 then fibaro:abort() end
+
+dimValue = tonumber(fibaro:getValue(dimID, "value"))
+if dimValue <= threshold then
+  for i = dimValue,99,step do
+    print("in +" .. i)
+    if i < 99 then fibaro:call(dimID, "setValue",i) end
+    fibaro:sleep(100)
+    if fibaro:countScenes() > 1 then
+      fibaro:abort()
+    end
+  end
+  fibaro:sleep(3000)
+  fibaro:abort()
+else
+  for i = dimValue,0,-step do
+    print("in -" .. i)
+    if i > 0 then fibaro:call(dimID, "setValue",i) end
+    fibaro:sleep(100)
+    if fibaro:countScenes() > 1 then
+      fibaro:abort()
+    end
+  end
+  fibaro:sleep(3000)
+  fibaro:abort()
+end
